@@ -1,0 +1,10 @@
+{
+  "admin": {
+    "nome": "Fulano da Silva",
+    "email": "fulano@qa.com"
+  },
+  "common": {
+    "nome": "Usuario Comum",
+    "email": "usuario.comum@qa.com"
+  }
+}
