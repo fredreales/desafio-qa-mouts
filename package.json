@@ -1,0 +1,23 @@
+{
+  "name": "desafio-qa-mouts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fredreales/desafio-qa-mouts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fredreales/desafio-qa-mouts/issues"
+  },
+  "homepage": "https://github.com/fredreales/desafio-qa-mouts#readme",
+  "devDependencies": {
+    "cypress": "^14.5.0"
+  }
+}
