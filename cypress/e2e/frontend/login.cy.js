@@ -1,7 +1,7 @@
 import LoginPage from '../../support/pageObjects/LoginPage';
 import HomePage from '../../support/pageObjects/HomePage';
 
-describe('Testes da Funcionalidade de Login', () => {
+describe('Testes de login', () => {
 
     let usersData;
 
@@ -13,7 +13,7 @@ describe('Testes da Funcionalidade de Login', () => {
     });
 
     it('Cenário 1: Login com sucesso como Administrador', () => {
-        //prepara a interceptação da chamada da API de usuários
+
         cy.intercept('GET', '**/usuarios').as('getUsuarios');
 
         const adminEmail = usersData.admin.email;
@@ -21,10 +21,7 @@ describe('Testes da Funcionalidade de Login', () => {
 
         LoginPage.preencherFormulario(adminEmail, adminPassword);
         LoginPage.submeterFormulario();
-
-        // aguarda a requisição de usuários terminar antes de validar a UI
         cy.wait('@getUsuarios');
-
         HomePage.validarBoasVindasAdmin(usersData.admin.nome);
         cy.url().should('include', '/admin/home');
     });
@@ -38,10 +35,7 @@ describe('Testes da Funcionalidade de Login', () => {
 
         LoginPage.preencherFormulario(commonUserEmail, commonUserPassword);
         LoginPage.submeterFormulario();
-
-
         cy.wait('@getProdutos');
-
         HomePage.validarTituloStore();
         cy.url().should('include', '/home');
     });
@@ -52,9 +46,7 @@ describe('Testes da Funcionalidade de Login', () => {
 
         LoginPage.preencherFormulario('email.invalido@qa.com', 'senhaerrada');
         LoginPage.submeterFormulario();
-
         cy.wait('@loginRequest').its('response.statusCode').should('eq', 401);
-
         cy.contains('Email e/ou senha inválidos').should('be.visible');
         cy.url().should('include', '/login');
     });

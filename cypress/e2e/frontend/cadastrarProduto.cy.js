@@ -3,7 +3,7 @@ import HomePage from '../../support/pageObjects/HomePage';
 import CadastrarProdutosPage from '../../support/pageObjects/CadastrarProdutosPage';
 import ListarProdutosPage from '../../support/pageObjects/ListarProdutosPage';
 
-describe('Testes da Funcionalidade de Produtos', () => {
+describe('Cadastro de produtos com usuario ADMIN', () => {
 
     const produto = {
         nome: 'Produto teste',

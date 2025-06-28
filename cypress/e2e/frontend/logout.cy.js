@@ -1,7 +1,7 @@
 import LoginPage from '../../support/pageObjects/LoginPage';
 import HomePage from '../../support/pageObjects/HomePage';
 
-describe('Testes da Funcionalidade de Logout', () => {
+describe('Testes de logout', () => {
 
     it('Deve realizar o logout de um usuário comum com sucesso', () => {
 

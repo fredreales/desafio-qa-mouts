@@ -3,8 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+   "scripts": {
+    "test": "npx cypress run",
+    "test:headed": "npx cypress run --headed --browser chrome",
+    "test:e2e": "npx cypress run --spec 'cypress/e2e/frontend/**/*'",
+    "test:e2e:headed": "npx cypress run --spec 'cypress/e2e/frontend/**/*' --headed --browser chrome",
+    "test:api": "npx cypress run --spec 'cypress/e2e/api/**/*'",
+    "test:api:headed": "npx cypress run --spec 'cypress/e2e/api/**/*' --headed --browser chrome",
+    "cy:open": "npx cypress open"
   },
   "repository": {
     "type": "git",
