@@ -1,0 +1,44 @@
+name: Cypress tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run API tests
+        uses: cypress-io/github-action@v6
+        with:
+          command: npm run test:api
+          browser: chrome
+        env:
+          CYPRESS_ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          CYPRESS_ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          CYPRESS_COMMON_USER_EMAIL: ${{ secrets.COMMON_USER_EMAIL }}
+          CYPRESS_COMMON_USER_PASSWORD: ${{ secrets.COMMON_USER_PASSWORD }}
+          CYPRESS_API_BASE_URL: "https://serverest.dev"
+
+  frontend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run E2E tests
+        uses: cypress-io/github-action@v6
+        with:
+          command: npm run test:e2e
+          browser: chrome
+        env:
+          CYPRESS_ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          CYPRESS_ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          CYPRESS_COMMON_USER_EMAIL: ${{ secrets.COMMON_USER_EMAIL }}
+          CYPRESS_COMMON_USER_PASSWORD: ${{ secrets.COMMON_USER_PASSWORD }}
+          CYPRESS_API_BASE_URL: "https://serverest.dev"
