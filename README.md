@@ -10,6 +10,7 @@ Este repositório contém a solução para o desafio de Automação proposto, qu
 * **JavaScript**
 * **Node.js**
 * **Cypress** - Framework principal para automação de testes E2E e de API.
+* **GitHub Actions** - Para automação da pipeline de CI/CD.
 * **@faker-js/faker** - Biblioteca para geração de massa de dados dinâmica e realista.
 
 ## Funcionalidades e cenários testados
@@ -42,12 +43,24 @@ A construção deste projeto seguiu rigorosamente as melhores práticas do merca
 * **Sincronização com a Rede (`cy.intercept`):** Os testes aguardam explicitamente por requisições de API antes de realizar asserções na interface, eliminando a instabilidade ("flakiness").
 * **Separação de Dados (Fixtures):** Dados de teste não-sensíveis (personas de usuários) são gerenciados em arquivos de fixture (`users.json`).
 * **`npm Scripts`:** Scripts customizados no `package.json` para facilitar a execução de diferentes suítes de teste (completa, apenas frontend, apenas API) tanto em modo headless quanto interativo.
+* **Pipeline de CI/CD:** Automação da execução dos testes com GitHub Actions para garantir a qualidade contínua do código.
+
+## Pipeline CI/CD com GitHub Actions
+
+Este projeto possui uma pipeline de Integração Contínua configurada em `.github/workflows/ci.yml`.
+
+* **Gatilhos:** A pipeline é acionada automaticamente a cada `push` ou `pull request` para a branch `main`.
+* **Execução Paralela:** Para otimizar o tempo de execução, os testes de **frontend** e **API** rodam em dois jobs paralelos e independentes.
+* **Segurança:** As credenciais sensíveis são injetadas de forma segura em tempo de execução através dos **GitHub Repository Secrets**, garantindo que nenhum dado sigiloso seja exposto.
 
 ## Estrutura de Arquivos
 
 A estrutura do projeto está organizada da seguinte forma:
 ```text
 /DESAFIO-QA-MOUTS
+|-- .github/
+|   |-- workflows/
+|   |   `-- ci.yml
 |-- cypress
 |   |-- e2e
 |   |   |-- api/
@@ -62,16 +75,10 @@ A estrutura do projeto está organizada da seguinte forma:
 |   |   `-- users.json
 |   `-- support/
 |       |-- pageObjects/
-|       |   |-- CadastrarProdutosPage.js
-|       |   |-- CadastroPage.js
-|       |   |-- HomePage.js
-|       |   |-- ListarProdutosPage.js
-|       |   `-- LoginPage.js
 |       |-- commands.js
 |       `-- e2e.js
 |-- .gitignore
 |-- cypress.config.js
-|-- cypress.env.json
 |-- package.json
 `-- README.md
 ```
