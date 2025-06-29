@@ -23,6 +23,11 @@ class HomePage {
     cy.get(ELEMENTS.botaoListarProdutos).should('be.visible');
   }
 
+   validarAusenciaBotoesAdmin() {
+    cy.get(ELEMENTS.registerUsersButton).should('not.exist');
+    cy.get(ELEMENTS.registerProductsButton).should('not.exist');
+  }
+
   validarTituloStore() {
     cy.get(ELEMENTS.tituloStore).should('have.text', 'Serverest Store');
   }

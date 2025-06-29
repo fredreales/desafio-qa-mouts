@@ -1,15 +1,15 @@
-import LoginPage from '../../support/pageObjects/LoginPage';
 import HomePage from '../../support/pageObjects/HomePage';
 
-describe('Testes de adição de produto à lista de compras', () => {
+describe('Testes de Busca e Adição de Produtos à Lista', () => {
 
     beforeEach(() => {
-        cy.fixture('users').then(users => {
-            LoginPage.fazerLogin(users.common.email, Cypress.env('COMMON_USER_PASSWORD'));
+        
+        cy.createUserApi(false).then(userData => {
+            cy.loginUI(userData.email, userData.password);
         });
     });
 
-    it('Deve adicionar um produto à lista de compras, navegar e retornar à página inicial', () => {
+    it('Deve buscar um produto, adicioná-lo à lista e retornar à página inicial', () => {
         const nomeProduto = 'Logitech MX Vertical';
 
         HomePage.buscarProduto(nomeProduto);

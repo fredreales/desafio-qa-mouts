@@ -1,7 +1,8 @@
-const ELEMENTS = {
+export const ELEMENTS = {
   emailInput: '[data-testid="email"]',
   passwordInput: '[data-testid="senha"]',
-  loginButton: '[data-testid="entrar"]'
+  submitButton: '[data-testid="entrar"]',
+  errorAlert: '.alert.alert-secondary'
 };
 
 class LoginPage {
@@ -9,20 +10,26 @@ class LoginPage {
     cy.visit('/login');
   }
 
-  preencherFormulario(email, senha) {
+  preencherFormulario(email, password) {
     cy.get(ELEMENTS.emailInput)
       .should('be.visible')
       .type(email);
 
     cy.get(ELEMENTS.passwordInput)
       .should('be.visible')
-      .type(senha, { log: false });
+      .type(password, { log: false });
   }
 
   submeterFormulario() {
-    cy.get(ELEMENTS.loginButton)
+    cy.get(ELEMENTS.submitButton)
       .should('be.visible')
       .click();
+  }
+
+  validarMensagemDeErro(mensagem) {
+    cy.get(ELEMENTS.errorAlert)
+      .should('be.visible')
+      .should('contain', mensagem);
   }
 
   fazerLogin(email, senha) {

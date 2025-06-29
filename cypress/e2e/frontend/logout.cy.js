@@ -1,12 +1,11 @@
-import LoginPage from '../../support/pageObjects/LoginPage';
 import HomePage from '../../support/pageObjects/HomePage';
 
-describe('Testes de logout', () => {
+describe('Testes da Funcionalidade de Logout', () => {
 
     it('Deve realizar o logout de um usuário comum com sucesso', () => {
 
-        cy.fixture('users').then(users => {
-            LoginPage.fazerLogin(users.common.email, Cypress.env('COMMON_USER_PASSWORD'));
+        cy.createUserApi(false).then(userData => {
+            cy.loginUI(userData.email, userData.password);
         });
 
         cy.url().should('include', '/home');

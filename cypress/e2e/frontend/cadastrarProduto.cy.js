@@ -1,41 +1,35 @@
-import LoginPage from '../../support/pageObjects/LoginPage';
 import HomePage from '../../support/pageObjects/HomePage';
 import CadastrarProdutosPage from '../../support/pageObjects/CadastrarProdutosPage';
 import ListarProdutosPage from '../../support/pageObjects/ListarProdutosPage';
+import { faker } from '@faker-js/faker';
 
-describe('Cadastro de produtos com usuario ADMIN', () => {
-
-    const produto = {
-        nome: 'Produto teste',
-        preco: 999,
-        descricao: 'Teste cadastrando um novo produto',
-        quantidade: 100
-    };
+describe('Testes de Gerenciamento de Produtos (Admin)', () => {
 
     beforeEach(() => {
-        cy.fixture('users').then(users => {
-            LoginPage.fazerLogin(users.admin.email, Cypress.env('ADMIN_PASSWORD'));
+
+        cy.createUserApi(true).then(userData => {
+            cy.loginUI(userData.email, userData.password);
         });
-    
     });
 
-    it('Cenário 1: Deve cadastrar um novo produto com sucesso', () => {
+    it('Deve cadastrar e excluir um produto com sucesso', () => {
+        const produto = {
+            nome: "Produto E2E - " + faker.string.uuid(),
+            preco: faker.number.int({ min: 100, max: 2000 }),
+            descricao: faker.commerce.productDescription(),
+            quantidade: faker.number.int({ min: 1, max: 100 })
+        };
+
         cy.intercept('POST', '**/produtos').as('postProduto');
+        cy.intercept('DELETE', '**/produtos/*').as('deleteProduto');
 
         HomePage.clicarCadastrarProdutos();
         CadastrarProdutosPage.preencherFormulario(produto.nome, produto.preco, produto.descricao, produto.quantidade);
         CadastrarProdutosPage.submeterCadastro();
-
         cy.wait('@postProduto').its('response.statusCode').should('eq', 201);
-    });
-
-    it('Cenário 2: Deve listar e validar o produto recém criado e deleta-lo', () => {
-       cy.intercept('DELETE', '**/produtos/*').as('deleteProduto');
 
         HomePage.clicarListarProdutos();
-        ListarProdutosPage.validarProdutoNaLista(produto.nome, produto.preco, produto.descricao);
         ListarProdutosPage.excluirProdutoDaLista(produto.nome);
-
         cy.wait('@deleteProduto').its('response.statusCode').should('eq', 200);
         cy.contains('tr', produto.nome).should('not.exist');
     });

@@ -1,4 +1,4 @@
-name: Cypress tests
+name: Cypress Tests
 
 on:
   push:
@@ -17,12 +17,8 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           command: npm run test:api
-          browser: chrome
         env:
-          CYPRESS_ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
-          CYPRESS_ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-          CYPRESS_COMMON_USER_EMAIL: ${{ secrets.COMMON_USER_EMAIL }}
-          CYPRESS_COMMON_USER_PASSWORD: ${{ secrets.COMMON_USER_PASSWORD }}
+          CYPRESS_BASE_URL: "https://front.serverest.dev"
           CYPRESS_API_BASE_URL: "https://serverest.dev"
 
   frontend-tests:
@@ -35,10 +31,6 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           command: npm run test:e2e
-          browser: chrome
         env:
-          CYPRESS_ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
-          CYPRESS_ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-          CYPRESS_COMMON_USER_EMAIL: ${{ secrets.COMMON_USER_EMAIL }}
-          CYPRESS_COMMON_USER_PASSWORD: ${{ secrets.COMMON_USER_PASSWORD }}
+          CYPRESS_BASE_URL: "https://front.serverest.dev"
           CYPRESS_API_BASE_URL: "https://serverest.dev"
