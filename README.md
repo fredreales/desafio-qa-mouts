@@ -1,61 +1,49 @@
-# Desafio de automação de testes - ServeRest
+# Desafio de Automação de Testes com Cypress - ServeRest
 
-Este repositório contém a solução para o desafio de Automação proposto, que consiste em desenvolver testes E2E e de API para a plataforma [ServeRest](https://serverest.dev/). O objetivo é demonstrar a aplicação de boas práticas de desenvolvimento, padrões de projeto e a construção de uma suíte de testes robusta e de alta qualidade.
+[![Status da Pipeline](https://github.com/fredreales/desafio-qa-mouts/actions/workflows/ci.yml/badge.svg)](https://github.com/fredreales/desafio-qa-mouts/actions/workflows/ci.yml)
 
-**Aplicações alvo:**
+Este repositório contém a solução para o Desafio de Automação proposto, que consiste em desenvolver testes E2E e de API para a plataforma [ServeRest](https://serverest.dev/). O objetivo é demonstrar a aplicação de boas práticas de desenvolvimento, padrões de projeto e a construção de uma suíte de testes robusta.
+
+**Aplicações Alvo:**
 * **Frontend:** `https://front.serverest.dev/`
 * **API (Swagger):** `https://serverest.dev/`
 
-## Stack utilizada:
+## Stack
 * **JavaScript**
 * **Node.js**
 * **Cypress** - Framework principal para automação de testes E2E e de API.
 * **GitHub Actions** - Para automação da pipeline de CI/CD.
 * **@faker-js/faker** - Biblioteca para geração de massa de dados dinâmica e realista.
 
-## Funcionalidades e cenários testados
+## Funcionalidades e Cenários Testados
 
 A suíte de testes automatizados foi dividida em duas frentes principais: Frontend (E2E) e API, cobrindo os fluxos críticos da aplicação, incluindo cenários positivos e negativos.
 
-### Testes de frontend (E2E)
+### Testes de Frontend (E2E)
 
-* **Login (`login.cy.js`):** Valida os fluxos de autenticação para usuários administradores e comuns, além do tratamento de erro para credenciais inválidas (validando a resposta 401 da API).
-* **Cadastro de Usuário (`cadastro.cy.js`):** Cobre o fluxo de criação de contas para perfis de administrador e comum. Inclui cenários negativos como tentativa de cadastro com campos obrigatórios em branco e com e-mail já existente (validando a resposta 400 da API).
-* **Gerenciamento de Produtos (`cadastrarProduto.cy.js`):** Testa o ciclo de vida completo de um produto por um usuário administrador, incluindo a criação, a validação na listagem e a exclusão para limpeza do ambiente.
-* **Logout (`logout.cy.js`):** Garante que o processo de encerramento de sessão funciona corretamente para todos os perfis de usuário, validando o redirecionamento para a página de login.
-* **Busca de Produtos (`buscaEAddProduto.cy.js`):** Simula a jornada de um usuário comum ao buscar um produto, adicioná-lo à sua lista de compras e navegar entre as páginas.
+* **Login:** Valida os fluxos de autenticação para usuários administradores e comuns e o tratamento de erro para credenciais inválidas.
+* **Cadastro de Usuário:** Cobre o fluxo de criação de contas para perfis de administrador e comum, incluindo cenários negativos para campos obrigatórios e e-mail duplicado.
+* **Gerenciamento de Produtos:** Testa o ciclo de vida completo de um produto por um usuário administrador (criar, validar na listagem e excluir).
+* **Logout:** Garante que o processo de encerramento de sessão funciona corretamente.
+* **Busca de Produtos:** Simula a jornada de um usuário comum ao buscar um produto e adicioná-lo à sua lista de compras.
 
-### Testes de API (`servrest.api.cy.js`)
+### Testes de API
 
-* **Leitura e Contrato (GET /usuarios):** Valida que o endpoint público de usuários está funcional e que a estrutura (schema) da resposta está correta.
-* **Ciclo de Vida de um Recurso (POST -> PUT -> DELETE /produtos):** Um teste E2E completo que cria, altera e exclui um produto, garantindo a integridade de todas as operações CRUD em sequência.
-* **Teste de Autenticação (POST /produtos - 401):** Garante que o endpoint de criação de produtos é protegido e não pode ser acessado sem um token de autorização.
-* **Teste de Regra de Negócio (POST /produtos - 400):** Valida que a API impede a criação de produtos com nomes duplicados.
-* **Teste de Autorização (DELETE /produtos - 403):** Garante que um usuário comum não pode executar ações destrutivas (excluir) restritas a administradores.
+* **Usuários:** Contém testes para o recurso de usuários, incluindo a validação de contrato do endpoint de listagem e um teste de ciclo de vida completo (Criar, Alterar, Excluir).
+* **Produtos:** Contém testes para o recurso de produtos, incluindo o ciclo de vida completo e cenários negativos de segurança (401, 403) e regras de negócio (400).
 
-## Boas Práticas e Padrões de Projeto Aplicados
+##  Boas Práticas e Padrões de Projeto Aplicados
 
-A construção deste projeto seguiu rigorosamente as melhores práticas do mercado para garantir a qualidade, manutenibilidade e robustez do código.
-
-* **Page Object Model (POM):** Toda a interação com as páginas foi abstraída em classes específicas, mantendo os testes limpos e focados no comportamento.
-* **Dados de Teste Dinâmicos:** Uso da biblioteca `@faker-js/faker` para gerar dados únicos a cada execução.
-* **Gerenciamento de Dados Sensíveis:** As senhas e e-mails de teste são gerenciados através de variáveis de ambiente (`cypress.env.json`), com o arquivo devidamente incluído no `.gitignore` para não ser versionado.
-* **Sincronização com a Rede (`cy.intercept`):** Os testes aguardam explicitamente por requisições de API antes de realizar asserções na interface, eliminando a instabilidade ("flakiness").
-* **Separação de Dados (Fixtures):** Dados de teste não-sensíveis (personas de usuários) são gerenciados em arquivos de fixture (`users.json`).
-* **`npm Scripts`:** Scripts customizados no `package.json` para facilitar a execução de diferentes suítes de teste (completa, apenas frontend, apenas API) tanto em modo headless quanto interativo.
-* **Pipeline de CI/CD:** Automação da execução dos testes com GitHub Actions para garantir a qualidade contínua do código.
-
-## Pipeline CI/CD com GitHub Actions
-
-Este projeto possui uma pipeline de Integração Contínua configurada em `.github/workflows/ci.yml`.
-
-* **Gatilhos:** A pipeline é acionada automaticamente a cada `push` ou `pull request` para a branch `main`.
-* **Execução Paralela:** Para otimizar o tempo de execução, os testes de **frontend** e **API** rodam em dois jobs paralelos e independentes.
-* **Segurança:** As credenciais sensíveis são injetadas de forma segura em tempo de execução através dos **GitHub Repository Secrets**, garantindo que nenhum dado sigiloso seja exposto.
+* **Page Object Model (POM):** Toda a interação com as páginas de frontend foi abstraída em classes específicas, mantendo os testes limpos e focados no comportamento. [cite: 3]
+* **Comandos Customizados (`commands.js`):** Foram criados comandos reutilizáveis (ex: `cy.createUserApi`, `cy.loginUI`) para encapsular ações repetitivas e complexas, limpando o código dos testes e centralizando a lógica de setup.
+* **Sincronização com a Rede (`cy.intercept`):** Uso de interceptadores para aguardar respostas da API antes de realizar asserções, eliminando a instabilidade ("flakiness") dos testes. [cite: 7]
+* **Versionamento de Dependências:** As versões das dependências no `package.json` são exatas (sem `^`), garantindo builds consistentes e reproduzíveis no ambiente de CI/CD. [cite: 33]
+* **Pipeline de CI/CD:** Uma pipeline com GitHub Actions foi configurada para executar toda a suíte de testes automaticamente a cada alteração no código, com jobs paralelos para frontend e API para otimizar o tempo de feedback.
 
 ## Estrutura de Arquivos
 
-A estrutura do projeto está organizada da seguinte forma:
+A estrutura final do projeto está organizada da seguinte forma:
+
 ```text
 /DESAFIO-QA-MOUTS
 |-- .github/
@@ -64,15 +52,14 @@ A estrutura do projeto está organizada da seguinte forma:
 |-- cypress
 |   |-- e2e
 |   |   |-- api/
-|   |   |   `-- servrest.api.cy.js
+|   |   |   |-- produtos.api.cy.js
+|   |   |   `-- usuarios.api.cy.js
 |   |   `-- frontend/
 |   |       |-- buscaEAddProduto.cy.js
 |   |       |-- cadastrarProduto.cy.js
 |   |       |-- cadastro.cy.js
 |   |       |-- login.cy.js
 |   |       `-- logout.cy.js
-|   |-- fixtures/
-|   |   `-- users.json
 |   `-- support/
 |       |-- pageObjects/
 |       |-- commands.js
@@ -82,9 +69,7 @@ A estrutura do projeto está organizada da seguinte forma:
 |-- package.json
 `-- README.md
 ```
-
-
-## Como Rodar o Projeto Localmente
+# Como Rodar o Projeto Localmente
 
 Siga as instruções abaixo para configurar e executar a suíte de automação na sua máquina.
 
@@ -105,20 +90,7 @@ Siga as instruções abaixo para configurar e executar a suíte de automação n
     npm install
     ```
 
-3.  **Configure as Variáveis de Ambiente (Passo Essencial):**
-    Este projeto utiliza um arquivo `cypress.env.json` para armazenar credenciais. Como este arquivo não é versionado, você precisa criá-lo manualmente na raiz do projeto.
-
-    Crie um arquivo chamado `cypress.env.json` e cole o seguinte conteúdo (certifique-se de que o usuário comum existe e não é admin):
-    ```json
-    {
-      "ADMIN_EMAIL": "fulano@qa.com",
-      "ADMIN_PASSWORD": "teste",
-      "COMMON_USER_EMAIL": "seu_usuario_comum@qa.com",
-      "COMMON_USER_PASSWORD": "sua_senha_comum"
-    }
-    ```
-
-4.  **Execute os Testes usando os `npm scripts`:**
+3.  **Execute os Testes usando os `npm scripts`:**
 
     * **Para abrir a interface interativa do Cypress:**
         ```bash
@@ -140,7 +112,3 @@ Siga as instruções abaixo para configurar e executar a suíte de automação n
         npm run test:api
         ```
     *(Use a terminação `:headed` para rodar os testes com o navegador abrindo, ex: `npm run test:e2e:headed`)*
-
-
-
-
